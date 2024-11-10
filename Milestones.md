@@ -5,6 +5,55 @@
 3. [ ] Deploy the [WordCount Example](https://github.com/apache/flink-kubernetes-operator/tree/main/examples/flink-beam-example)
 4. [ ] Use a Dockerfile to build the Flink application image
 
+## Milestone 1: Quickstart
+
+## Install the Flink Operator
+
+Install Cert Manager:
+
+```bash
+kubectl create -f https://github.com/jetstack/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+```
+
+Install Flink Operator:
+
+```bash
+helm repo add flink-operator-repo https://downloads.apache.org/flink/flink-kubernetes-operator-1.10.0/
+helm install flink-kubernetes-operator flink-operator-repo/flink-kubernetes-operator
+```
+
+Note: we see that the `default` namespace is used by the flink operator:
+
+```bash
+ default       flink-kubernetes-operator-6b55b4664-zvwld  ●  2/2   Running         0 10.244.0.7    minikube  33m
+```
+
+```bash
+kubectl get pods
+helm list
+```
+
+## Submit a Flink Job
+
+```bash
+kubectl create -f https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.10/examples/basic.yaml
+```
+
+Check the job status:
+
+```bash
+kubectl get flinkdeployment
+kubectl logs -f deploy/basic-example
+```
+
+## Undo it all
+
+```bash
+kubectl delete -f https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.10/examples/basic.yaml
+helm uninstall flink-kubernetes-operator
+kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v1.8.2/cert-manager.yaml
+```
+
 ## Milestone 2: Use Skaffold
 
 ### Part A: Operator Installation via Skaffold
@@ -138,7 +187,11 @@ META-INF/LICENSE
 META-INF/NOTICE
 ```
 
+Doing this in the root directory instead of `word-count`
+
 ```bash
-kubectl apply -f word-count-example.yaml
-kubectl delete -f word-count-example.yaml 
+eval $(minikube docker-env)
+DOCKER_BUILDKIT=1 docker build -f word-count/Dockerfile -t flink-beam-example:latest word-count
+kubectl apply -f word-count/word-count-example.yaml
+kubectl delete -f word-count/word-count-example.yaml 
 ```
