@@ -5,6 +5,9 @@ metadata:
 
 requires:
   - configs:
+      - word-count-example
+    path: flink/skaffold.yaml
+  - configs:
       - state-machine-example
     path: flink/skaffold.yaml
 

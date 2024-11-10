@@ -60,3 +60,13 @@ kubectl logs -f deploy/state-machine-example
 ```
 
 ## Milestone 3: Deploy the WordCount Example
+
+First, we are going to split the deployments up so `Word Count` and `State Machine` can be deployed separately.
+
+Here's what the new way of deploying the `State Machine` looks like:
+
+```bash
+skaffold dev --module state-machine-example
+```
+
+This will set us up to be able to deploy the `Word Count` example in the next step.
