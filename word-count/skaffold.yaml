@@ -5,7 +5,7 @@ metadata:
 build:
   artifacts:
     - image: flink-beam-example
-      context: word-count
+      context: .
       docker:
         dockerfile: Dockerfile
 manifests:
