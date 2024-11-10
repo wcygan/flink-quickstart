@@ -4,6 +4,7 @@
 2. [x] Use Skaffold
 3. [ ] Deploy the [WordCount Example](https://github.com/apache/flink-kubernetes-operator/tree/main/examples/flink-beam-example)
 4. [ ] Use a Dockerfile to build the Flink application image
+5. [ ] Potentially update this to be a Beam application
 
 ## Milestone 1: Quickstart
 

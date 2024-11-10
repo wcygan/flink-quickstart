@@ -8,6 +8,13 @@ build:
       context: .
       docker:
         dockerfile: Dockerfile
+  tagPolicy:
+    dateTime:
+      format: "2006-01-02_15-04-05.999_MST"
+      timezone: "Local"
+  local:
+    useDockerCLI: true
+    useBuildkit: true
 manifests:
   rawYaml:
     - word-count-example.yaml
