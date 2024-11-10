@@ -36,7 +36,7 @@ spec:
       cpu: 1
   job:
     entryClass: org.apache.beam.examples.WordCount
-    jarURI: local:///opt/flink/usrlib/beam-runner.jar
+    jarURI: local:///code/target/flink-wordcount-example-1.0-SNAPSHOT.jar
     args: [ "--runner=FlinkRunner", "--output=file://opt/output.txt" ]
     parallelism: 1
     upgradeMode: stateless

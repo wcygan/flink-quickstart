@@ -71,7 +71,7 @@ skaffold dev --module state-machine-example
 
 This will set us up to be able to deploy the `Word Count` example in the next step.
 
-Even better, we can split all of the deployments up into their own modules:
+Even better, we can split all the deployments up into their own modules:
 
 1. Flink Operator Installation
 2. State Machine Example
@@ -90,4 +90,11 @@ skaffold dev --module state-machine
 ```bash
 curl -o word-count/word-count-example.yaml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/refs/heads/main/examples/flink-beam-example/beam-example.yaml
 curl -o word-count/pom.xml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/refs/heads/main/examples/flink-beam-example/pom.xml
+```
+
+```bash
+cd word-count
+eval $(minikube docker-env)
+DOCKER_BUILDKIT=1 docker build . -t flink-beam-example:latest
+kubectl apply -f word-count-example.yaml
 ```

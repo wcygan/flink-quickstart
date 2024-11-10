@@ -16,7 +16,7 @@ deploy:
       - name: flink-kubernetes-operator
         repo: https://archive.apache.org/dist/flink/flink-kubernetes-operator-1.10.0
         remoteChart: flink-kubernetes-operator
-        namespace: flink-operator
+        namespace: default # flink-operator
         createNamespace: true
         wait: true
         setValues:
