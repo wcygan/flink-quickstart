@@ -195,3 +195,5 @@ DOCKER_BUILDKIT=1 docker build -f word-count/Dockerfile -t flink-beam-example:la
 kubectl apply -f word-count/word-count-example.yaml
 kubectl delete -f word-count/word-count-example.yaml 
 ```
+
+Next, we need to translate this into [word-count/skaffold.yaml](/word-count/skaffold.yaml) so that it can continuously build the application.
