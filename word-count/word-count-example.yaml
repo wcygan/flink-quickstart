@@ -21,7 +21,7 @@ kind: FlinkDeployment
 metadata:
   name: beam-example
 spec:
-  image: flink-beam-example:latest
+  image: flink-beam-example
   flinkVersion: v1_17
   flinkConfiguration:
     taskmanager.numberOfTaskSlots: "1"

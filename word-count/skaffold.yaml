@@ -2,6 +2,12 @@ apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
   name: word-count
+build:
+  artifacts:
+    - image: flink-beam-example
+      context: word-count
+      docker:
+        dockerfile: Dockerfile
 manifests:
   rawYaml:
     - word-count-example.yaml
