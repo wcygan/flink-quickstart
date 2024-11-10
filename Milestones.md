@@ -198,3 +198,73 @@ kubectl delete -f word-count/word-count-example.yaml
 ```
 
 Next, we need to translate this into [word-count/skaffold.yaml](/word-count/skaffold.yaml) so that it can continuously build the application.
+
+### Current problem: latest flink is not being updated by Skaffold
+
+Maybe we need to update the [FlinkDeployment](/word-count/word-count-example.yaml) to specify the latest image in a pod template?
+
+Documentation: 
+
+1. https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.10/docs/custom-resource/overview/#flinkdeployment
+2. https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.10/docs/custom-resource/reference/
+3. https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.10/docs/custom-resource/pod-template/
+
+Here are some possible examples from GitHub: https://github.com/search?q=%22kind%3A+FlinkDeployment%22+%22podTemplate%22&type=code
+
+Essentially, the problem is that we're not actually using the latest tagged image. Here's a clear example:
+
+```bash
+docker images --digests
+REPOSITORY                                      TAG                                                                DIGEST                                                                    IMAGE ID       CREATED          SIZE
+flink-beam-example                              2024-11-10_13-21-33.505_CST                                        <none>                                                                    38a8b7c09949   2 minutes ago    777MB
+flink-beam-example                              38a8b7c09949946f68048e5fa83149db8b55e04ddc74789d688f8a3ffac628a9   <none>                                                                    38a8b7c09949   2 minutes ago    777MB
+flink-beam-example                              2024-11-10_12-50-41.404_CST                                        <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              2024-11-10_12-52-20.764_CST                                        <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              2024-11-10_13-05-08.474_CST                                        <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              2024-11-10_13-07-42.204_CST                                        <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              2024-11-10_13-09-25.673_CST                                        <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              2024-11-10_13-16-35.923_CST                                        <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              2024-11-10_13-19-13.911_CST                                        <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              91e81bc4d7cbbf5c14e80c830d2805d49b9a2c36f64e4b4d9a7507b936d81ca0   <none>                                                                    91e81bc4d7cb   33 minutes ago   777MB
+flink-beam-example                              2024-11-10_12-42-54.759_CST                                        <none>                                                                    df1ba5db0a5b   54 minutes ago   777MB
+flink-beam-example                              ce1a856-dirty                                                      <none>                                                                    df1ba5db0a5b   54 minutes ago   777MB
+flink-beam-example                              df1ba5db0a5bc6b413013685340beeb6a5169e9e260c63884adf1d5f7e3db288   <none>                                                                    df1ba5db0a5b   54 minutes ago   777MB
+flink-beam-example                              472922ba941f119978e9831c8c2eae8954fc9eae32ff3237c9cb0a10aca7df31   <none>                                                                    472922ba941f   58 minutes ago   777MB
+<none>                                          <none>                                                             <none>                                                                    129d5ddf25e1   2 hours ago      777MB
+flink-beam-example                              latest                                                             <none>                                                                    ae09d8c7fed1   2 hours ago      777MB
+ghcr.io/apache/flink-kubernetes-operator        c703255                                                            sha256:e9c2ce635b89cfede3e6a20c002d39803b1cc754f39dc2c6e87f8d4e0cf59d22   a292a12359b8   3 weeks ago      412MB
+```
+
+Now let's see what image that the FlinkDeployment is actually using:
+
+```bash
+docker inspect $(kubectl get pods -l app=beam-example -o json | jq -r '.items[0].status.containerStatuses[] | select(.name=="flink-main-container") | .imageID' | sed 's|docker://||') | jq '.[] | {
+  Id,
+  RepoTags,
+  Comment,
+  Created,
+  LastTagTime: .Metadata.LastTagTime,
+  Architecture,
+  Variant,
+  Os
+}'
+```
+
+```json
+{
+  "Id": "sha256:ae09d8c7fed164f8665f39e217ce4e0a6d5b6f6e8291666787f4b4e3795b0892",
+  "RepoTags": [
+    "flink-beam-example:latest"
+  ],
+  "Comment": "buildkit.dockerfile.v0",
+  "Created": "2024-11-10T17:34:23.247433299Z",
+  "LastTagTime": "2024-11-10T18:16:20.173335422Z",
+  "Architecture": "arm64",
+  "Variant": "v8",
+  "Os": "linux"
+}
+```
+
+You see it's using image ID `ae09d8c7fed1` instead of `38a8b7c09949`! That's not what we want.
+
+So, somewhere in our Skaffold or Flink Manifests we have a problem.
