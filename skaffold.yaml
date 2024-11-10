@@ -5,11 +5,11 @@ metadata:
 
 requires:
   - configs:
-      - word-count-example
-    path: flink/skaffold.yaml
+      - word-count
+    path: word-count/skaffold.yaml
   - configs:
-      - state-machine-example
-    path: flink/skaffold.yaml
+      - state-machine
+    path: state-machine/skaffold.yaml
 
 profiles:
   - name: bootstrap
@@ -18,5 +18,5 @@ profiles:
         path: /requires
         value:
           - configs:
-              - flink-operator-install
-            path: flink/skaffold.yaml
+              - flink-operator
+            path: flink-operator/skaffold.yaml

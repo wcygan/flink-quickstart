@@ -1,27 +1,7 @@
 apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
-  name: state-machine-example
-manifests:
-  rawYaml:
-    - state-machine-example.yaml
-deploy:
-  kubectl: { }
----
-apiVersion: skaffold/v4beta1
-kind: Config
-metadata:
-  name: word-count-example
-manifests:
-  rawYaml:
-    - word-count-example.yaml
-deploy:
-  kubectl: { }
----
-apiVersion: skaffold/v4beta1
-kind: Config
-metadata:
-  name: flink-operator-install
+  name: flink-operator
 deploy:
   helm:
     releases:

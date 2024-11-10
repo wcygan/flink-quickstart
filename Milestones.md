@@ -70,3 +70,24 @@ skaffold dev --module state-machine-example
 ```
 
 This will set us up to be able to deploy the `Word Count` example in the next step.
+
+Even better, we can split all of the deployments up into their own modules:
+
+1. Flink Operator Installation
+2. State Machine Example
+3. Word Count Example
+
+This way, we can deploy each example separately.
+
+```bash
+skaffold delete -p bootstrap
+skaffold run -p bootstrap
+skaffold dev --module state-machine
+```
+
+### Setting up Word Count
+
+```bash
+curl -o word-count/word-count-example.yaml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/refs/heads/main/examples/flink-beam-example/beam-example.yaml
+curl -o word-count/pom.xml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/refs/heads/main/examples/flink-beam-example/pom.xml
+```

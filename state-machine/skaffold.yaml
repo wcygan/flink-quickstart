@@ -1,0 +1,9 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+metadata:
+  name: state-machine
+manifests:
+  rawYaml:
+    - state-machine-example.yaml
+deploy:
+  kubectl: { }
