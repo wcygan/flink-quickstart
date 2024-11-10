@@ -1,0 +1,19 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+metadata:
+  name: wordcount-application
+
+requires:
+  - configs:
+      - flink-config
+    path: flink/skaffold.yaml
+
+profiles:
+  - name: bootstrap
+    patches:
+      - op: replace
+        path: /requires
+        value:
+          - configs:
+              - flink-operator-install
+            path: flink/skaffold.yaml

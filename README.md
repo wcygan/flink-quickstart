@@ -51,4 +51,5 @@ kubectl logs -f deploy/basic-example
 ```bash
 kubectl delete -f https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.10/examples/basic.yaml
 helm uninstall flink-kubernetes-operator
+kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v1.8.2/cert-manager.yaml
 ```
