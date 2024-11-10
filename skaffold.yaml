@@ -5,7 +5,7 @@ metadata:
 
 requires:
   - configs:
-      - flink-config
+      - state-machine-example
     path: flink/skaffold.yaml
 
 profiles:

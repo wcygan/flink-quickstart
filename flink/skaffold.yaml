@@ -1,10 +1,10 @@
 apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
-  name: flink-config
+  name: state-machine-example
 manifests:
   rawYaml:
-    - basic.yaml
+    - state-machine-example.yaml
 deploy:
   kubectl: { }
 ---

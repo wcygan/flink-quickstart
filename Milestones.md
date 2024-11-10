@@ -1,8 +1,9 @@
 # Milestones
 
 1. [x] Get the application deployed by exactly following the tutorial
-2. [ ] Use Skaffold
-3. [ ] Use a Dockerfile to build the Flink application image
+2. [x] Use Skaffold
+3. [ ] Deploy the [WordCount Example](https://github.com/apache/flink-kubernetes-operator/tree/main/examples/flink-beam-example)
+4. [ ] Use a Dockerfile to build the Flink application image
 
 ## Milestone 2: Use Skaffold
 
@@ -35,7 +36,7 @@ skaffold delete -p bootstrap
 Next, we want to be able to submit the job via Skaffold using `skaffold dev`.
 
 ```bash
-curl -o flink/basic.yaml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.10/examples/basic.yaml
+curl -o flink/state-machine-example.yaml https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.10/examples/basic.yaml
 ```
 
 Update `flink/skaffold.yaml`:
@@ -44,10 +45,18 @@ Update `flink/skaffold.yaml`:
 apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
-  name: flink-config
+  name: state-machine-example
 manifests:
   rawYaml:
-    - basic.yaml
+    - state-machine-example.yaml
 deploy:
   kubectl: { }
 ```
+
+Check the logs:
+
+```bash
+kubectl logs -f deploy/state-machine-example
+```
+
+## Milestone 3: Deploy the WordCount Example
