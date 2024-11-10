@@ -98,3 +98,47 @@ eval $(minikube docker-env)
 DOCKER_BUILDKIT=1 docker build . -t flink-beam-example:latest
 kubectl apply -f word-count-example.yaml
 ```
+
+#### The Correct Jar
+
+Turns out we needed `local:///code/target/original-flink-wordcount-example-1.0-SNAPSHOT.jar` instead of `local:///code/target/flink-wordcount-example-1.0-SNAPSHOT.jar`!
+
+The reason is because of what the JAR Entries contained (specifically looking for `WordCount.class`):
+
+```bash
+wcygan@foobar word-count % jar tf target/original-flink-wordcount-example-1.0-SNAPSHOT.jar
+META-INF/
+META-INF/MANIFEST.MF
+org/
+org/apache/
+org/apache/flink/
+org/apache/flink/util/
+META-INF/maven/
+META-INF/maven/org.apache.flink/
+META-INF/maven/org.apache.flink/flink-wordcount-example/
+org/apache/flink/WordCount$Tokenizer.class
+org/apache/flink/util/WordCountData.class
+org/apache/flink/WordCount.class
+META-INF/maven/org.apache.flink/flink-wordcount-example/pom.xml
+META-INF/maven/org.apache.flink/flink-wordcount-example/pom.properties
+wcygan@foobar word-count % jar tf target/flink-wordcount-example-1.0-SNAPSHOT.jar
+META-INF/MANIFEST.MF
+org/
+org/apache/
+org/apache/flink/
+org/apache/flink/connector/
+org/apache/flink/connector/datagen/
+org/apache/flink/connector/datagen/source/
+org/apache/flink/connector/datagen/source/GeneratorFunction.class
+org/apache/flink/connector/datagen/source/DataGeneratorSource.class
+org/apache/flink/connector/datagen/source/GeneratingIteratorSourceReader.class
+org/apache/flink/connector/datagen/source/GeneratorSourceReaderFactory.class
+META-INF/
+META-INF/LICENSE
+META-INF/NOTICE
+```
+
+```bash
+kubectl apply -f word-count-example.yaml
+kubectl delete -f word-count-example.yaml 
+```
