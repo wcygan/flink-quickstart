@@ -37,6 +37,6 @@ spec:
   job:
     entryClass: org.apache.flink.WordCount
     jarURI: local:///code/target/original-flink-wordcount-example-1.0-SNAPSHOT.jar
-    args: [ "--runner=FlinkRunner", "--output=file://opt/output.txt" ]
+    args: [ "--runner=FlinkRunner" ]
     parallelism: 1
     upgradeMode: stateless
