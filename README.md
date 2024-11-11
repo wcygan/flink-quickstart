@@ -17,14 +17,8 @@ skaffold dev --module state-machine
 
 ## Run Word Count
 
-First time setup (and whenever modifying the Flink job):
-
 ```bash
-DOCKER_BUILDKIT=1 docker build -f word-count/Dockerfile -t flink-beam-example:latest word-count
+DOCKER_BUILDKIT=1 docker build -f word-count/Dockerfile -t flink-beam-example:latest word-count && skaffold dev --module word-count
 ```
 
-Then, just do:
-
-```bash
-skaffold dev --module word-count
-```
+It's a bit annoying that you have to build the docker image like this, but I haven't found a way around it yet...
