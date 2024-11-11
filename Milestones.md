@@ -268,3 +268,34 @@ docker inspect $(kubectl get pods -l app=beam-example -o json | jq -r '.items[0]
 You see it's using image ID `ae09d8c7fed1` instead of `38a8b7c09949`! That's not what we want.
 
 So, somewhere in our Skaffold or Flink Manifests we have a problem.
+
+### Temporary Solution
+
+Maybe the solution you can use for now is simply to delete all the docker images for `flink-beam-example`, then run `skaffold dev`.
+
+```bash
+docker images | rg flink-beam-example | awk '{print $3}' | xargs docker rmi -f 
+```
+
+### Observation
+
+After deleing the containers & then running `DOCKER_BUILDKIT=1 docker build -f word-count/Dockerfile -t flink-beam-example:latest word-count`, I was able to get the image built and running again.
+
+However, just by doing `skaffold dev --module word-count` it didn't solve the problem!
+
+So, this probably means there is a constraint when developing Flink jobs particularly using Skaffold.
+
+You might want to open an issue on the Skaffold GitHub repo to figure out if there's a solution
+
+Otherwise, just do this whenever you need to update the Flink code:
+
+```bash
+DOCKER_BUILDKIT=1 docker build -f word-count/Dockerfile -t flink-beam-example:latest word-count && skaffold dev --module word-count
+```
+
+Why doesn't skaffold automatically do the same thing for me? Maybe I need a combination of useCLI and useBuildkit
+
+Alternatively, maybe we should just package it with Jib instead? Here are two examples:
+
+1. https://github.com/wcygan/monorepo-jib-grpc
+2. https://github.com/Pozo/continuous-java-kubernetes

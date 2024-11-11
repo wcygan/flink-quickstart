@@ -26,11 +26,6 @@ spec:
   flinkConfiguration:
     taskmanager.numberOfTaskSlots: "1"
   serviceAccount: flink
-  podTemplate:
-    spec:
-      containers:
-        # Do not change the main container name
-        - name: flink-main-container
   jobManager:
     resource:
       memory: "2048m"

@@ -28,6 +28,27 @@ package org.apache.flink.util;
 public class WordCountData {
 
     public static final String[] WORDS = new String[] {
-            "remember", "december", "foo"
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
+            "remember", "december", "foo",
     };
 }
